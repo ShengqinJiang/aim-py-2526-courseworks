@@ -33,10 +33,10 @@ class Grid():
     def current_pos(self, value: Tuple[int, int]) -> None:
         if type(value) != tuple or len(list(value)) != 2:
             raise TypeError
-        value = map(int,list(value))
-        value[0] = min(max(value[0],0),self.height)
-        value[1] = min(max(value[1],0),self.width)
-        self.current_pos = tuple(value)
+        value = list(map(int,value))
+        value[0] = min(max(value[0],0),self.width)
+        value[1] = min(max(value[1],0),self.height)
+        self._current_pos = tuple(value)
         """
         current_pos 属性的 setter（作为第 1 题留空）
 
@@ -54,7 +54,7 @@ class Grid():
         for i in range(2):
             pos[i] += f[self.current_direction.value][i]
         self.current_pos = tuple(pos)
-        return tuple(pos)
+        return self.current_pos
 
         '''
         让机器人向当前方向走一格
@@ -65,7 +65,8 @@ class Grid():
         pass  # TODO: Question 2
 
     def turn_left(self) -> Facing:  # type: ignore
-        return Facing((self.current_direction.value + 1) % 4)
+        self.current_direction = Facing((self.current_direction.value + 1) % 4)
+        return self.current_direction
         '''
         让机器人逆时针转向
         返回一个新方向 (Facing.UP/DOWN/LEFT/RIGHT)
@@ -73,7 +74,8 @@ class Grid():
         pass  # TODO: Question 3a
 
     def turn_right(self) -> Facing:  # type: ignore
-        return Facing((self.current_direction.value - 1) % 4)
+        self.current_direction = Facing((self.current_direction.value - 1) % 4)
+        return self.current_direction
         '''
         让机器人顺时针转向
         '''
@@ -116,7 +118,7 @@ class AdvancedGrid(Grid):
             pos[i] += f[self.current_direction.value][i]
         self.current_pos = tuple(pos)
         self.steps += 1
-        return tuple(pos)
+        return self.current_pos
     def distance_to_enemy(self) -> int:
         x1,y1 = self.current_pos
         x2,y2 = self.enemy_pos
