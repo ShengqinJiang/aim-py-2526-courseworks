@@ -31,6 +31,12 @@ class Grid():
 
     @current_pos.setter
     def current_pos(self, value: Tuple[int, int]) -> None:
+        if type(value) != tuple or len(list(value)) != 2:
+            raise TypeError
+        value = map(int,list(value))
+        value[0] = min(max(value[0],0),self.height)
+        value[1] = min(max(value[1],0),self.width)
+        self.current_pos = tuple(value)
         """
         current_pos 属性的 setter（作为第 1 题留空）
 
@@ -43,6 +49,13 @@ class Grid():
         pass  # TODO: Question 1
 
     def move_forward(self) -> Tuple[int, int]:  # type: ignore
+        pos = list(self.current_pos)
+        f = [[1,0],[0,1],[-1,0],[0,-1]]
+        for i in range(2):
+            pos[i] += f[self.current_direction.value][i]
+        self.current_pos = tuple(pos)
+        return tuple(pos)
+
         '''
         让机器人向当前方向走一格
         返回新的坐标 (x,y) 同时更新成员变量
@@ -52,6 +65,7 @@ class Grid():
         pass  # TODO: Question 2
 
     def turn_left(self) -> Facing:  # type: ignore
+        return Facing((self.current_direction.value + 1) % 4)
         '''
         让机器人逆时针转向
         返回一个新方向 (Facing.UP/DOWN/LEFT/RIGHT)
@@ -59,18 +73,21 @@ class Grid():
         pass  # TODO: Question 3a
 
     def turn_right(self) -> Facing:  # type: ignore
+        return Facing((self.current_direction.value - 1) % 4)
         '''
         让机器人顺时针转向
         '''
         pass  # TODO: Question 3b
 
     def find_enemy(self) -> bool:  # type: ignore
+        return self.current_pos == self.enemy_pos
         '''
         如果找到敌人（机器人和敌人坐标一致），就返回true
         '''
         pass  # TODO: Question 4
 
     def record_position(self, step: int) -> None:
+        self.position_history[step] = self.current_pos
         '''
         将当前位置记录到 position_history 字典中
         键(key)为步数 step，值(value)为当前坐标 self.current_pos
@@ -79,12 +96,31 @@ class Grid():
         pass  # TODO: Question 5a
 
     def get_position_at_step(self, step: int) -> tuple:  # type: ignore
+        if step in self.position_history:
+            return self.position_history[step]
+        return None
         '''
         从 position_history 字典中获取指定步数的坐标
         如果该步数不存在，返回 None
         '''
         pass  # TODO: Question 5b
 
+class AdvancedGrid:
+    def __init__(self, width: int, height: int, enemy_pos: tuple):
+        super().__init__(self, width, height, enemy_pos)
+        self.steps: int = 0
+    def move_forward(self) -> Tuple[int, int]:
+        pos = list(self.current_pos)
+        f = [[1,0],[0,1],[-1,0],[0,-1]]
+        for i in range(2):
+            pos[i] += f[self.current_direction.value][i]
+        self.current_pos = tuple(pos)
+        self.steps += 1
+        return tuple(pos)
+    def distance_to_enemy(self) -> int:
+        x1,y1 = self.current_pos
+        x2,y2 = self.enemy_pos
+        return abs(x1-x2) + abs(y1-y2)
 
 """
 在这里你需要实现 AdvancedGrid 类，继承自 Grid 类，并添加以下功能：
