@@ -33,9 +33,9 @@ class Grid():
     def current_pos(self, value: Tuple[int, int]) -> None:
         if type(value) != tuple or len(list(value)) != 2:
             raise TypeError
-        value = list(map(int,value))
-        value[0] = min(max(value[0],0),self.width)
-        value[1] = min(max(value[1],0),self.height)
+        value = list(map(int, value))
+        value[0] = min(max(value[0], 0), self.width)
+        value[1] = min(max(value[1], 0), self.height)
         self._current_pos = tuple(value)
         """
         current_pos 属性的 setter（作为第 1 题留空）
@@ -50,7 +50,7 @@ class Grid():
 
     def move_forward(self) -> Tuple[int, int]:  # type: ignore
         pos = list(self.current_pos)
-        f = [[1,0],[0,1],[-1,0],[0,-1]]
+        f = [[1, 0], [0, 1], [-1, 0], [0, -1]]
         for i in range(2):
             pos[i] += f[self.current_direction.value][i]
         self.current_pos = tuple(pos)
@@ -107,22 +107,46 @@ class Grid():
         '''
         pass  # TODO: Question 5b
 
+
 class AdvancedGrid(Grid):
     def __init__(self, width: int, height: int, enemy_pos: tuple):
         super().__init__(width, height, enemy_pos)
         self.steps: int = 0
+
     def move_forward(self) -> Tuple[int, int]:
         pos = list(self.current_pos)
-        f = [[1,0],[0,1],[-1,0],[0,-1]]
+        f = [[1, 0], [0, 1], [-1, 0], [0, -1]]
         for i in range(2):
             pos[i] += f[self.current_direction.value][i]
         self.current_pos = tuple(pos)
         self.steps += 1
         return self.current_pos
+
     def distance_to_enemy(self) -> int:
-        x1,y1 = self.current_pos
-        x2,y2 = self.enemy_pos
+        x1, y1 = self.current_pos
+        x2, y2 = self.enemy_pos
         return abs(x1-x2) + abs(y1-y2)
+
+
+class AdvancedGrid(Grid):
+    def __init__(self, width: int, height: int, enemy_pos: tuple):
+        super().__init__(width, height, enemy_pos)
+        self.steps: int = 0
+
+    def move_forward(self) -> Tuple[int, int]:
+        pos = list(self.current_pos)
+        f = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+        for i in range(2):
+            pos[i] += f[self.current_direction.value][i]
+        self.current_pos = tuple(pos)
+        self.steps += 1
+        return self.current_pos
+
+    def distance_to_enemy(self) -> int:
+        x1, y1 = self.current_pos
+        x2, y2 = self.enemy_pos
+        return abs(x1-x2) + abs(y1-y2)
+
 
 """
 在这里你需要实现 AdvancedGrid 类，继承自 Grid 类，并添加以下功能：
