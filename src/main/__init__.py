@@ -105,9 +105,9 @@ class Grid():
         '''
         pass  # TODO: Question 5b
 
-class AdvancedGrid:
+class AdvancedGrid(Grid):
     def __init__(self, width: int, height: int, enemy_pos: tuple):
-        super().__init__(self, width, height, enemy_pos)
+        super().__init__(width, height, enemy_pos)
         self.steps: int = 0
     def move_forward(self) -> Tuple[int, int]:
         pos = list(self.current_pos)
