@@ -107,6 +107,22 @@ class Grid():
         '''
         pass  # TODO: Question 5b
 
+class AdvancedGrid(Grid):
+    def __init__(self, width: int, height: int, enemy_pos: tuple):
+        super().__init__(width, height, enemy_pos)
+        self.steps: int = 0
+    def move_forward(self) -> Tuple[int, int]:
+        pos = list(self.current_pos)
+        f = [[1,0],[0,1],[-1,0],[0,-1]]
+        for i in range(2):
+            pos[i] += f[self.current_direction.value][i]
+        self.current_pos = tuple(pos)
+        self.steps += 1
+        return self.current_pos
+    def distance_to_enemy(self) -> int:
+        x1,y1 = self.current_pos
+        x2,y2 = self.enemy_pos
+        return abs(x1-x2) + abs(y1-y2)
 
 class AdvancedGrid(Grid):
     def __init__(self, width: int, height: int, enemy_pos: tuple):
